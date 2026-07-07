@@ -1,252 +1,59 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#1D1D1B">
-  <title>Blender Estatus</title>
-  <link rel="icon" type="image/png" href="https://media.licdn.com/dms/image/v2/D4E0BAQE5UZZakCyBIA/company-logo_200_200/company-logo_200_200/0/1737056927927/blender_group_logo?e=2147483647&v=beta&t=_OBkDyAUapmhNxn65gjFnblp4OZvXz8ve060y6UR7lQ">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Menu de infografias interactivas Blender." />
+  <title>INFOGRAFIAS BLENDER</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Acelera la carga del SDK de Firebase y las conexiones a Firestore. -->
-  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
-  <link rel="dns-prefetch" href="https://www.gstatic.com">
-  <link rel="dns-prefetch" href="https://firestore.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@350;700;850;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="assets/favicon.png" type="image/png" />
+  <link rel="stylesheet" href="assets/topographic-background.css" />
+  <link rel="stylesheet" href="assets/styles.css" />
+  <script defer src="assets/topographic-background.js"></script>
 </head>
 <body>
-
-  <!-- ============ Fondo animado (topográfico + coordenadas + destellos) ============ -->
-  <div id="bg-topo" aria-hidden="true">
-    <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-      <g class="topo-layer topo-a">
-        <path d="M-120 120 C 220 60, 430 200, 720 140 S 1240 60, 1580 150"/>
-        <path d="M-120 200 C 240 140, 450 280, 740 220 S 1260 150, 1580 230"/>
-        <path d="M-120 300 C 200 250, 470 380, 760 320 S 1280 250, 1580 330"/>
-        <path d="M-120 430 C 260 370, 430 520, 720 450 S 1300 380, 1580 470"/>
-        <path d="M-120 560 C 220 500, 470 650, 760 580 S 1280 520, 1580 600"/>
-        <path d="M-120 690 C 240 640, 440 800, 740 720 S 1300 650, 1580 740"/>
-        <path d="M-120 820 C 220 770, 470 920, 760 850 S 1280 790, 1580 870"/>
-        <!-- "isla" topográfica (curvas concéntricas) -->
-        <path d="M1040 360 C 1140 330, 1230 410, 1190 500 C 1150 590, 1010 600, 950 520 C 900 450, 940 390, 1040 360 Z"/>
-        <path d="M1055 395 C 1125 375, 1190 430, 1162 495 C 1134 560, 1035 568, 992 510 C 957 460, 985 415, 1055 395 Z"/>
-        <path d="M1070 430 C 1115 418, 1155 452, 1138 492 C 1121 532, 1058 537, 1031 500 C 1009 467, 1025 442, 1070 430 Z"/>
-      </g>
-      <g class="topo-layer topo-b">
-        <path d="M-120 60 C 260 10, 440 150, 760 90 S 1300 10, 1580 100"/>
-        <path d="M-120 360 C 220 300, 470 450, 760 380 S 1280 310, 1580 400"/>
-        <path d="M-120 620 C 260 560, 430 720, 720 650 S 1300 580, 1580 670"/>
-        <!-- isla pequeña -->
-        <path d="M300 600 C 360 580, 415 620, 395 675 C 375 730, 290 735, 255 690 C 228 654, 240 620, 300 600 Z"/>
-        <path d="M315 632 C 355 620, 388 645, 374 680 C 360 715, 305 718, 283 690 C 266 666, 275 644, 315 632 Z"/>
-        <!-- coordenadas -->
-        <g class="coord" transform="translate(360 230)">
-          <line x1="-7" y1="0" x2="7" y2="0"/><line x1="0" y1="-7" x2="0" y2="7"/>
-          <text x="12" y="4">19.4326, -99.1332</text>
-        </g>
-        <g class="coord" transform="translate(980 700)">
-          <line x1="-7" y1="0" x2="7" y2="0"/><line x1="0" y1="-7" x2="0" y2="7"/>
-          <text x="12" y="4">25.6866, -100.3161</text>
-        </g>
-        <g class="coord" transform="translate(700 460)">
-          <line x1="-7" y1="0" x2="7" y2="0"/><line x1="0" y1="-7" x2="0" y2="7"/>
-          <text x="12" y="4">20.6597, -103.3496</text>
-        </g>
-        <!-- destellos -->
-        <circle class="glint" cx="430" cy="170" r="1.8"/>
-        <circle class="glint" cx="1180" cy="300" r="1.6"/>
-        <circle class="glint" cx="250" cy="540" r="1.7"/>
-        <circle class="glint" cx="900" cy="240" r="1.5"/>
-        <circle class="glint" cx="1080" cy="620" r="1.8"/>
-        <circle class="glint" cx="600" cy="780" r="1.6"/>
-      </g>
-    </svg>
-  </div>
-
-  <!-- ============ Pantalla: cargando ============ -->
-  <div id="screen-loading" class="screen">
-    <div class="screen-card">
-      <span class="spinner"></span>
-      <p>Cargando Blender Estatus…</p>
-    </div>
-  </div>
-
-  <!-- ============ Pantalla: falta config.js ============ -->
-  <div id="screen-setup" class="screen hidden">
-    <div class="screen-card screen-card-wide">
-      <div class="brand brand-lg"><span class="brand-dot"></span>Blender <strong>Estatus</strong></div>
-      <h2>Falta configuración</h2>
-      <p>No se encontró <code>src/config.js</code>.</p>
-      <ol class="setup-steps">
-        <li>Copia <code>src/config.example.js</code> como <code>src/config.js</code>.</li>
-        <li>Rellena los datos de tu proyecto Firebase.</li>
-        <li>Recarga esta página.</li>
-      </ol>
-      <p class="text-muted">Instrucciones completas en el <code>README.md</code>.</p>
-    </div>
-  </div>
-
-  <!-- ============ Pantalla: login ============ -->
-  <div id="screen-login" class="screen hidden">
-    <div class="screen-card">
-      <div class="brand brand-lg"><span class="brand-dot"></span>Blender <strong>Estatus</strong></div>
-      <p class="text-muted">Seguimiento de pedidos de Blender Group</p>
-      <button class="btn btn-primary btn-lg" id="btn-login">
-        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21.35 11.1H12v2.9h5.35c-.5 2.5-2.6 4.3-5.35 4.3a5.8 5.8 0 1 1 0-11.6c1.45 0 2.75.55 3.75 1.45l2.15-2.15A8.65 8.65 0 1 0 12 20.65c4.95 0 8.55-3.5 8.55-8.55 0-.35-.05-.7-.2-1Z"/></svg>
-        Continuar con Google
-      </button>
-      <p id="login-error" class="form-errors hidden" role="alert"></p>
-      <p class="text-muted text-sm">Solo cuentas <strong>@blendergroup.com</strong></p>
-    </div>
-  </div>
-
-  <!-- ============ Pantalla: usuario bloqueado ============ -->
-  <div id="screen-blocked" class="screen hidden">
-    <div class="screen-card">
-      <span class="empty-icon">🚫</span>
-      <h2>Cuenta desactivada</h2>
-      <p class="text-muted">Tu cuenta está inactiva. Contacta a un administrador.</p>
-      <button class="btn btn-ghost" id="btn-logout-blocked">Cerrar sesión</button>
-    </div>
-  </div>
-
-  <!-- ============ Pantalla: rol pendiente ============ -->
-  <div id="screen-pending" class="screen hidden">
-    <div class="screen-card">
-      <span class="empty-icon">⏳</span>
-      <h2>Cuenta en revisión</h2>
-      <p class="text-muted">Tu acceso fue creado correctamente. Un administrador debe asignarte un rol para continuar.</p>
-      <button class="btn btn-ghost" id="btn-logout-pending">Cerrar sesión</button>
-    </div>
-  </div>
-
-  <!-- ============ App ============ -->
-  <div id="app" class="hidden">
-    <header class="app-header">
-      <div class="brand">
-        <img class="brand-logo logo-light"
-          src="https://blendergroup.com/storage/product/media/1085/gallery_1781642574_nRiAR.webp"
-          alt="Blender Group" referrerpolicy="no-referrer">
-        <img class="brand-logo logo-dark"
-          src="https://blendergroup.com/storage/product/media/1086/gallery_1781643272_oKO4Y.webp"
-          alt="Blender Group" referrerpolicy="no-referrer">
-        <strong>Estatus</strong>
+  <main class="landing-shell">
+    <header class="hero">
+      <div class="brand-bar">
+        <img class="brand-logo" src="assets/logo-blender.png" alt="Blender" />
       </div>
-
-      <nav id="nav-tabs" class="nav-tabs" aria-label="Secciones principales">
-        <button class="tab active" data-view="board"><span class="tab-icon" aria-hidden="true">🗂️</span><span class="tab-text">Tablero</span></button>
-        <button class="tab" data-view="dashboard"><span class="tab-icon" aria-hidden="true">📊</span><span class="tab-text">Dashboard</span></button>
-        <button class="tab" data-view="admin"><span class="tab-icon" aria-hidden="true">⚙️</span><span class="tab-text">Admin</span></button>
-      </nav>
-
-      <div class="header-actions">
-        <button class="theme-toggle" id="btn-theme" aria-label="Cambiar modo nocturno" title="Modo nocturno">🌙</button>
-        <div id="notif-wrap" class="header-drop">
-          <button class="btn btn-icon" id="btn-notifications" aria-label="Notificaciones">
-            🔔<span id="notif-badge" class="notif-badge hidden">0</span>
-          </button>
-          <div id="notif-panel" class="dropdown notif-panel hidden">
-            <div class="dropdown-head">
-              <strong>Notificaciones</strong>
-              <button class="link-btn" id="btn-mark-all">Marcar todas como leídas</button>
-            </div>
-            <div id="notif-list" class="notif-list"></div>
-          </div>
-        </div>
-
-        <div id="user-wrap" class="header-drop">
-          <button class="btn-avatar" id="user-menu-btn" aria-label="Menú de usuario">
-            <span id="user-avatar"></span>
-          </button>
-          <div id="user-menu" class="dropdown user-menu hidden">
-            <div class="dropdown-head dropdown-user">
-              <strong id="menu-user-name"></strong>
-              <span class="text-muted" id="menu-user-role"></span>
-            </div>
-            <button class="dropdown-item" id="btn-profile">Mi perfil</button>
-            <button class="dropdown-item" id="btn-logout">Cerrar sesión</button>
-          </div>
-        </div>
+      <div class="hero-copy">
+        <h1>INFOGRAFIAS BLENDER</h1>
+        <p>Explora las infinitas oportunidades de mercado para cada uno de los sistemas constructivos, descubre nuevas aplicaciones para los materiales y comunica a tus clientes las posibilidades de nuestras soluciones.</p>
       </div>
     </header>
 
-    <main class="app-main">
-      <!-- Tablero -->
-      <section id="view-board" class="view">
-        <div class="view-toolbar">
-          <h1>Tablero</h1>
-          <div class="toolbar-actions">
-            <input class="input input-sm board-search" id="board-search" type="search" placeholder="Buscar por cotización, pedido o cliente" aria-label="Buscar por cotización, pedido o cliente">
-            <div id="board-vendor-filter" class="vfilter-host"></div>
-            <select class="input input-sm" id="board-status-filter" aria-label="Filtrar por estado">
-              <option value="Activo" selected>Activos</option>
-              <option value="Cerrado">Cerrados</option>
-              <option value="Cancelado">Cancelados</option>
-              <option value="Todos">Todos</option>
-            </select>
-            <select class="input input-sm" id="board-sla-filter" aria-label="Filtrar por estatus de tarea">
-              <option value="">Todas las tareas</option>
-              <option value="ontime">Tarea en Tiempo</option>
-              <option value="late">Tarea Atrasada</option>
-            </select>
-            <button class="btn btn-primary" id="btn-new-ticket">+ Nuevo ticket</button>
-          </div>
-        </div>
-        <div id="board" class="board" aria-live="polite"></div>
-      </section>
-
-      <!-- Dashboard -->
-      <section id="view-dashboard" class="view hidden">
-        <div class="view-toolbar"><h1>Dashboard</h1></div>
-        <div id="dashboard-content"></div>
-      </section>
-
-      <!-- Admin -->
-      <section id="view-admin" class="view hidden">
-        <div class="view-toolbar"><h1>Administración</h1></div>
-        <div id="admin-tabs" class="admin-tabs"></div>
-        <div id="admin-content"></div>
-      </section>
-    </main>
-
-    <!-- Navegación inferior (visible en móvil) -->
-    <nav id="nav-bottom" class="nav-bottom" aria-label="Secciones">
-      <button class="bottom-tab active" data-view="board"><span aria-hidden="true">🗂️</span><span>Tablero</span></button>
-      <button class="bottom-tab" data-view="dashboard"><span aria-hidden="true">📊</span><span>Dashboard</span></button>
-      <button class="bottom-tab" data-view="admin"><span aria-hidden="true">⚙️</span><span>Admin</span></button>
-    </nav>
-  </div>
-
-  <!-- ============ Modales ============ -->
-  <div id="ticket-modal" class="modal modal-side" role="dialog" aria-modal="true">
-    <div class="modal-panel" id="ticket-modal-content"></div>
-  </div>
-
-  <div id="form-modal" class="modal" role="dialog" aria-modal="true">
-    <div class="modal-card" id="form-modal-content"></div>
-  </div>
-
-  <div id="profile-modal" class="modal" role="dialog" aria-modal="true">
-    <div class="modal-card" id="profile-content"></div>
-  </div>
-
-  <div id="confirm-modal" class="modal modal-top" role="alertdialog" aria-modal="true">
-    <div class="modal-card modal-card-sm">
-      <div class="modal-body">
-        <h3 id="confirm-title"></h3>
-        <p id="confirm-message" class="text-muted"></p>
+    <section class="menu" aria-label="Menu de infografias">
+      <div class="menu-grid">
+        <a class="menu-link" href="infografias/estampado/index.html" aria-label="Abrir infografia de Concreto Estampado">
+          <img src="assets/buttons/concreto-estampado.png" alt="Concreto Estampado" />
+        </a>
+        <a class="menu-link" href="infografias/microcementos/index.html" aria-label="Abrir infografia de Microcementos">
+          <img src="assets/buttons/microcementos.png" alt="Microcementos" />
+        </a>
+        <a class="menu-link" href="infografias/tintas-pigmentos-acidos/index.html" aria-label="Abrir infografia de Tintas, Pigmentos y Acidos">
+          <img src="assets/buttons/tintas-pigmentos-acidos.png" alt="Tintas, Pigmentos y Acidos" />
+        </a>
+        <a class="menu-link" href="infografias/selladores/index.html" aria-label="Abrir infografia de Selladores">
+          <img src="assets/buttons/selladores.png" alt="Selladores" />
+        </a>
+        <a class="menu-link" href="infografias/industrial/index.html" aria-label="Abrir infografia de Soluciones Industriales">
+          <img src="assets/buttons/industrial.png" alt="Soluciones Industriales" />
+        </a>
       </div>
-      <footer class="modal-footer">
-        <button class="btn btn-ghost" id="btn-confirm-no">Cancelar</button>
-        <button class="btn btn-primary" id="btn-confirm-yes">Confirmar</button>
-      </footer>
-    </div>
-  </div>
+    </section>
 
-  <div id="toast-container" class="toast-container" aria-live="polite"></div>
-
-  <script type="module" src="src/app.js"></script>
+    <footer class="footer">
+      <div class="footer-inner">
+        <img class="footer-logo" src="assets/logo-blender-footer.png" alt="Blender" />
+        <div class="official-cta">
+          <p>VISITA NUESTRA PÁGINA OFICIAL</p>
+          <a class="official-link" href="https://www.blendergroup.com/" target="_blank" rel="noopener">www.blendergroup.com</a>
+        </div>
+      </div>
+    </footer>
+  </main>
 </body>
 </html>
